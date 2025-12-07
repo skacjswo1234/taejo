@@ -289,11 +289,28 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastScrollTop = 0;
     let scrollTimeout;
     let isMenuOpen = false;
+    const hasHero = document.querySelector('.hero') !== null;
+
+    // company 페이지인 경우 body에 클래스 추가 (헤더 스타일링용)
+    if (!hasHero) {
+        document.body.classList.add('no-hero');
+    }
 
     if (header) {
         function handleScroll() {
             // 데스크탑에서 메뉴가 열려있으면 헤더 숨김 처리 안함
             if (window.innerWidth >= 769 && isMenuOpen) {
+                return;
+            }
+            
+            // company 페이지에서는 헤더 숨김 처리 안함
+            if (!hasHero) {
+                header.classList.remove('hide');
+                if (window.pageYOffset > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
                 return;
             }
             
@@ -404,6 +421,54 @@ document.addEventListener('DOMContentLoaded', function() {
         // 휠 이벤트 리스너
         window.addEventListener('wheel', handleWheel, { passive: false });
         
+        // 스크롤 이벤트 (모바일 포함)
+        let lastScrollTop = 0;
+        let scrollTimeout;
+        
+        function handleScroll() {
+            const containerRect = productionScrollContainer.getBoundingClientRect();
+            const containerTop = containerRect.top;
+            const containerBottom = containerRect.bottom;
+            const viewportHeight = window.innerHeight;
+            
+            // 컨테이너가 뷰포트 안에 있는지 확인
+            if (containerTop < viewportHeight && containerBottom > 0) {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollDelta = scrollTop - lastScrollTop;
+                
+                if (Math.abs(scrollDelta) > 30 && !isScrolling) {
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        if (scrollDelta > 0) {
+                            // 아래로 스크롤 - 다음 이미지
+                            if (currentCardIndex < productionCards.length - 1) {
+                                isScrolling = true;
+                                currentCardIndex++;
+                                switchCard(currentCardIndex);
+                                setTimeout(() => {
+                                    isScrolling = false;
+                                }, 1000);
+                            }
+                        } else {
+                            // 위로 스크롤 - 이전 이미지
+                            if (currentCardIndex > 0) {
+                                isScrolling = true;
+                                currentCardIndex--;
+                                switchCard(currentCardIndex);
+                                setTimeout(() => {
+                                    isScrolling = false;
+                                }, 1000);
+                            }
+                        }
+                    }, 100);
+                }
+                
+                lastScrollTop = scrollTop;
+            }
+        }
+        
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        
         // 터치 이벤트 (모바일)
         let touchStartY = 0;
         let touchEndY = 0;
@@ -466,6 +531,72 @@ document.addEventListener('DOMContentLoaded', function() {
                 switchCard(currentCardIndex);
             }, 250);
         });
+    }
+
+    // Company Section Scroll Animation
+    const companySections = document.querySelectorAll('.company-section.fade-in-up');
+    if (companySections.length > 0) {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // 한 번만 애니메이션 실행되도록 옵저버 해제
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        companySections.forEach(function(section) {
+            observer.observe(section);
+        });
+
+        // 첫 번째 섹션은 즉시 표시
+        if (companySections.length > 0) {
+            companySections[0].classList.add('visible');
+        }
+    }
+
+    // Floating Top Button
+    const topBtn = document.getElementById('top-btn');
+    const phoneBtn = document.querySelector('.floating-btn--phone');
+    
+    if (topBtn) {
+        // 스크롤 시 Top 버튼 표시/숨김
+        function handleTopButton() {
+            if (window.pageYOffset > 300) {
+                topBtn.classList.add('visible');
+                if (phoneBtn) {
+                    phoneBtn.classList.add('visible');
+                }
+            } else {
+                topBtn.classList.remove('visible');
+                if (phoneBtn) {
+                    phoneBtn.classList.remove('visible');
+                }
+            }
+        }
+
+        // Top 버튼 클릭 시 맨 위로 스크롤
+        topBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 스크롤 이벤트 리스너
+        window.addEventListener('scroll', handleTopButton, { passive: true });
+        
+        // 초기 상태 확인
+        handleTopButton();
+    } else if (phoneBtn) {
+        // Top 버튼이 없어도 전화 버튼은 항상 표시
+        phoneBtn.classList.add('visible');
     }
 
 });
