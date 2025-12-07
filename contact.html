@@ -100,11 +100,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email" class="form-label">이메일 <span class="required">*</span></label>
-                        <input type="email" id="email" name="email" class="form-input" placeholder="이메일을 입력해주세요" required>
-                    </div>
-
-                    <div class="form-group">
                         <label for="phone" class="form-label">전화번호</label>
                         <input type="tel" id="phone" name="phone" class="form-input" placeholder="전화번호를 입력해주세요 (선택사항)">
                     </div>
@@ -162,79 +157,29 @@
 
     <footer class="footer">
         <div class="footer__inner">
-            <div class="footer__top">
+            <div class="footer__content">
                 <div class="footer__logo">
                     <a href="index.html">
                         <img src="images/taejo-logo.png" alt="태조식품 로고" class="footer__logo-img">
                     </a>
-                </div><!-- .footer__logo -->
-                <div class="footer__main-menu-container">
-                    <nav class="footer__main-menu">
-                        <ul class="footer-menu">
-                            <li class="footer-menu-item">
-                                <a href="company.html">COMPANY</a>
-                                <ul class="footer-sub-menu">
-                                    <li><a href="company.html">태조식품 소개</a></li>
-                                    <li><a href="company.html">회사 연혁</a></li>
-                                    <li><a href="company.html">사업장</a></li>
-                                </ul>
-                            </li>
-                            <li class="footer-menu-item">
-                                <a href="index.html#products">제품</a>
-                                <ul class="footer-sub-menu">
-                                    <li><a href="index.html#products">수산물 제품</a></li>
-                                    <li><a href="index.html#products">양조간장</a></li>
-                                </ul>
-                            </li>
-                            <li class="footer-menu-item">
-                                <a href="index.html#brand">BRAND</a>
-                                <ul class="footer-sub-menu">
-                                    <li><a href="index.html#brand">태조 브랜드</a></li>
-                                </ul>
-                            </li>
-                            <li class="footer-menu-item">
-                                <a href="index.html#news">뉴스</a>
-                                <ul class="footer-sub-menu">
-                                    <li><a href="index.html#news">공지사항</a></li>
-                                    <li><a href="index.html#news">보도자료</a></li>
-                                </ul>
-                            </li>
-                            <li class="footer-menu-item">
-                                <a href="contact.html">문의하기</a>
-                                <ul class="footer-sub-menu">
-                                    <li><a href="contact.html">고객 문의</a></li>
-                                    <li><a href="contact.html">제휴 문의</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </nav><!-- .footer__main-menu -->
-                    <a href="#sns" class="footer__social">
-                        <span class="footer__social-text">SNS</span>
-                        <i class="footer__social-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                                <path d="M14,9h-5v5h-2v-5H2v-2h5V2h2v5h5v2Z" fill="currentColor"></path>
-                            </svg>
-                        </i>
-                    </a><!-- .footer__social -->
-                </div><!-- .footer__main-menu-container -->
-            </div><!-- .footer__top -->
-            <div class="footer__bottom">
-                <nav class="footer__extend-menu">
-                    <ul class="footer-extend-menu">
-                        <li><a href="#customer">고객의 소리</a></li>
-                        <li><a href="#privacy">개인정보처리방침</a></li>
-                        <li><a href="#email">이메일 무단수집 거부</a></li>
-                        <li><a href="#family">패밀리 사이트</a></li>
-                    </ul>
-                </nav><!-- .footer__extend-menu -->
-                <div class="footer__company-info">
-                    <p class="footer__company-text">사업자번호: 346-45-00474</p>
-                    <p class="footer__company-text">상호: 태조식품</p>
-                    <p class="footer__company-text">주소: 제주특별자치도 서귀포시 대정읍 하모항구로56-1, 1~2층</p>
                 </div>
+                <nav class="footer__nav">
+                    <ul class="footer__menu">
+                        <li><a href="company.html">COMPANY</a></li>
+                        <li><a href="product.html">PRODUCT</a></li>
+                        <li><a href="contact.html">CONTACT</a></li>
+                    </ul>
+                </nav>
+                <div class="footer__info">
+                    <p class="footer__text">사업자번호: 346-45-00474 | 상호: 태조식품</p>
+                    <p class="footer__text">제주특별자치도 서귀포시 대정읍 하모항구로56-1, 1~2층</p>
+                    <p class="footer__text">전화: 010-8500-7800 | 이메일: kdm7700@naver.com</p>
+                </div>
+            </div>
+            <div class="footer__bottom">
                 <p class="footer__copyright">© 2025 태조식품. All rights reserved.</p>
-            </div><!-- .footer__bottom -->
-        </div><!-- .footer__inner -->
+            </div>
+        </div>
     </footer>
 
     <div id="scroll-down-target"></div>

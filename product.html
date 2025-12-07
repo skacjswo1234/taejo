@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>태조식품 - 제품소개</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Product Page Specific Styles */
+        .product-main {
+            padding-top: 0;
+            background: linear-gradient(180deg, #ffffff 0%, #f8f6f0 100%);
+        }
+
+        .product-grid {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            position: relative;
+        }
+
+        .product-card {
+            position: relative;
+            background: #ffffff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            cursor: pointer;
+        }
+
+        .product-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(107, 68, 35, 0.2);
+        }
+
+        .product-card__image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f8f6f0 0%, #ffffff 100%);
+        }
+
+        .product-card__image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 40px;
+        }
+
+        .product-card:hover .product-card__image {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        .product-card__overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, rgba(107, 68, 35, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .product-card:hover .product-card__overlay {
+            opacity: 1;
+        }
+
+        .product-card__content {
+            padding: 40px;
+            position: relative;
+            background: #ffffff;
+        }
+
+        .product-card__name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            font-family: var(--font-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .product-card:hover .product-card__name {
+            color: #6B4423;
+        }
+
+        .product-card__description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #666;
+            font-family: var(--font-secondary);
+            margin-bottom: 24px;
+        }
+
+        .product-card__link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #6B4423;
+            text-decoration: none;
+            font-family: var(--font-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 12px 0;
+        }
+
+        .product-card__link::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6B4423;
+            transition: width 0.3s ease;
+        }
+
+        .product-card__link:hover::after {
+            width: 100%;
+        }
+
+        .product-card__link svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card__link:hover svg {
+            transform: translateX(5px);
+        }
+
+        /* 트랜디한 뱃지 스타일 */
+        .product-card__badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: var(--font-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            z-index: 10;
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .product-card__badge--hot {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: #ffffff;
+        }
+
+        .product-card__badge--new {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: #ffffff;
+        }
+
+        .product-card__badge--best {
+            background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+            color: #ffffff;
+        }
+
+        .product-card__badge--recommend {
+            background: linear-gradient(135deg, #6B4423 0%, #8B5A3C 100%);
+            color: #ffffff;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .product-card__shine {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .product-card:hover .product-card__shine {
+            animation: shine 0.6s ease;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        /* Floating particles animation */
+        .product-card__particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #6B4423;
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) {
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            left: 50%;
+            animation-delay: 0.5s;
+        }
+
+        .particle:nth-child(3) {
+            left: 80%;
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0.6;
+            }
+        }
+
+        .product-card:hover .particle {
+            animation-play-state: running;
+        }
+
+        /* 모달 스타일 */
+        .product-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            padding: 20px;
+        }
+
+        .product-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .product-modal__overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .product-modal__content {
+            position: relative;
+            background: #ffffff;
+            border-radius: 24px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 1;
+            transform: scale(0.9) translateY(50px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.5);
+        }
+
+        .product-modal.active .product-modal__content {
+            transform: scale(1) translateY(0);
+        }
+
+        .product-modal__close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .product-modal__close:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: rotate(90deg);
+        }
+
+        .product-modal__body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .product-modal__image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            background: linear-gradient(135deg, #f8f6f0 0%, #ffffff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+        }
+
+        .product-modal__image {
+            max-width: 80%;
+            max-height: 80%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .product-modal__info {
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .product-modal__badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: var(--font-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+        }
+
+        .product-modal__badge--hot {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: #ffffff;
+        }
+
+        .product-modal__badge--new {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: #ffffff;
+        }
+
+        .product-modal__badge--best {
+            background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+            color: #ffffff;
+        }
+
+        .product-modal__badge--recommend {
+            background: linear-gradient(135deg, #6B4423 0%, #8B5A3C 100%);
+            color: #ffffff;
+        }
+
+        .product-modal__name {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 24px;
+            font-family: var(--font-secondary);
+            line-height: 1.2;
+        }
+
+        .product-modal__description {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #666;
+            font-family: var(--font-secondary);
+            margin-bottom: 40px;
+        }
+
+        .product-modal__features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 40px 0;
+        }
+
+        .product-modal__feature {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #666;
+            font-family: var(--font-secondary);
+            padding-left: 30px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .product-modal__feature::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #6B4423;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .product-modal__button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #6B4423 0%, #8B5A3C 100%);
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: var(--font-secondary);
+            padding: 18px 40px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(107, 68, 35, 0.3);
+        }
+
+        .product-modal__button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 68, 35, 0.4);
+        }
+
+        .product-modal__button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 80px 20px;
+            }
+
+            .product-card__image-wrapper {
+                height: 350px;
+            }
+
+            .product-card__image {
+                padding: 20px;
+            }
+
+            .product-card__content {
+                padding: 30px 20px;
+            }
+
+            .product-card__name {
+                font-size: 24px;
+            }
+
+            .product-card__description {
+                font-size: 14px;
+            }
+
+            .product-modal {
+                padding: 10px;
+                align-items: flex-start;
+                padding-top: 20px;
+            }
+
+            .product-modal__content {
+                max-height: 95vh;
+                max-width: 100%;
+                border-radius: 20px;
+            }
+
+            .product-modal__body {
+                grid-template-columns: 1fr;
+            }
+
+            .product-modal__image-wrapper {
+                min-height: 200px;
+                max-height: 250px;
+                padding: 20px 15px;
+            }
+
+            .product-modal__image {
+                max-width: 85%;
+                max-height: 85%;
+            }
+
+            .product-modal__info {
+                padding: 25px 20px;
+            }
+
+            .product-modal__badge {
+                font-size: 11px;
+                padding: 6px 12px;
+                margin-bottom: 12px;
+            }
+
+            .product-modal__name {
+                font-size: 22px;
+                margin-bottom: 12px;
+            }
+
+            .product-modal__description {
+                font-size: 14px;
+                line-height: 1.6;
+                margin-bottom: 20px;
+            }
+
+            .product-modal__features {
+                margin-bottom: 20px;
+            }
+
+            .product-modal__feature {
+                font-size: 13px;
+                line-height: 1.6;
+                margin-bottom: 8px;
+                padding-left: 24px;
+            }
+
+            .product-modal__button {
+                font-size: 16px;
+                padding: 14px 30px;
+            }
+
+            .product-modal__close {
+                width: 40px;
+                height: 40px;
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        /* Tablet Styles */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+        }
+
+        /* Stagger animation for cards */
+        .product-card:nth-child(1) { transition-delay: 0.1s; }
+        .product-card:nth-child(2) { transition-delay: 0.2s; }
+        .product-card:nth-child(3) { transition-delay: 0.3s; }
+        .product-card:nth-child(4) { transition-delay: 0.4s; }
+        .product-card:nth-child(5) { transition-delay: 0.5s; }
+        .product-card:nth-child(6) { transition-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <header class="header" id="header">
+        <div class="header-container">
+            <a href="index.html">
+                <img src="images/taejo-logo.png" alt="태조식품 로고" class="logo">
+            </a>
+        </div>
+        <a href="#menu-container" id="menu-controller" class="menu-controller">
+            <span class="menu-controller__text">
+                <i class="menu-controller__text--menu jt-typo--en jt-typo-en--08">MENU</i>
+                <i class="menu-controller__text--close jt-typo--en jt-typo-en--08">CLOSE</i>
+            </span>
+            <div class="menu-controller__icon">
+                <span class="menu-controller__icon-line menu-controller__icon-line--01"></span>
+                <span class="menu-controller__icon-line menu-controller__icon-line--02"></span>
+                <span class="menu-controller__icon-line menu-controller__icon-line--03"></span>
+            </div>
+        </a>
+    </header>
+
+    <div id="menu-container" class="menu-container">
+        <button class="menu-close-btn" id="menu-close-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <nav class="menu-nav">
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="company.html">COMPANY</a>
+                </li>
+                <li class="menu-item">
+                    <a href="product.html">PRODUCT</a>
+                </li>
+                <li class="menu-item">
+                    <a href="contact.html">문의하기</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <section class="hero">
+        <div class="hero-video">
+            <video id="hero-menu-video" class="hero-menu-video" playsinline loop muted preload="auto">
+                <source src="menu-bg.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="hero-slider">
+            <div class="hero-slide active">
+                <img src="images/h-1.png" alt="Hero Image 1" class="hero-image">
+            </div>
+            <div class="hero-slide">
+                <img src="images/h-1-2.png" alt="Hero Image 2" class="hero-image">
+            </div>
+            <div class="hero-slide">
+                <img src="images/h-1-3.png" alt="Hero Image 3" class="hero-image">
+            </div>
+            <div class="hero-slide">
+                <img src="images/h-1-4.png" alt="Hero Image 4" class="hero-image">
+            </div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">태조식품의 프리미엄 제품</h1>
+            <p class="hero-subtitle">전통의 맛과 현대적 기술이 만나 탄생한 최고 품질의 수산물</p>
+        </div>
+        <a class="scroll-down" href="#product-grid-target">
+            <span class="jt-typo--en jt-typo-en--07">Scroll Down</span>
+            <i class="jt-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0" y="0" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M12,16c-0.3,0-0.5-0.1-0.7-0.3L4.6,9L6,7.6l6,6l6-6L19.4,9l-6.7,6.7C12.5,15.9,12.3,16,12,16z"></path>
+                </svg>
+            </i>
+        </a>
+    </section>
+
+    <div id="product-grid-target"></div>
+
+    <main class="product-main">
+        <section class="product-grid">
+            <article class="product-card" data-name="굴비" data-description="전통 방식으로 훈제한 프리미엄 굴비입니다. 깊고 풍부한 맛이 일품이며, 특별한 식재료로 손색없는 품질을 자랑합니다." data-image="images/products/s-gulbi.png" data-link="https://www.coupang.com/vp/products/9217300415?itemId=27233297296&vendorItemId=93875613583&sourceType=srp_product_ads&clickEventId=631b40f0-d281-11f0-9be6-f17d8fe4780f&korePlacement=15&koreSubPlacement=1&clickEventId=631b40f0-d281-11f0-9be6-f17d8fe4780f&korePlacement=15&koreSubPlacement=1&traceId=miu2chrf" data-badge="hot">
+                <div class="product-card__particles">
+                    <span class="particle"></span>
+                    <span class="particle"></span>
+                    <span class="particle"></span>
+                </div>
+                <div class="product-card__shine"></div>
+                <div class="product-card__badge product-card__badge--hot">🔥 인기</div>
+                <div class="product-card__image-wrapper">
+                    <img src="images/products/s-gulbi.png" alt="굴비" class="product-card__image">
+                    <div class="product-card__overlay"></div>
+                </div>
+                <div class="product-card__content">
+                    <h2 class="product-card__name">굴비</h2>
+                    <p class="product-card__description">전통 방식으로 훈제한 프리미엄 굴비입니다. 깊고 풍부한 맛이 일품이며, 특별한 식재료로 손색없는 품질을 자랑합니다.</p>
+                </div>
+            </article>
+
+            <article class="product-card" data-name="은갈치" data-description="은은한 빛깔과 부드러운 식감이 특징인 은갈치입니다. 신선한 원료만을 엄선하여 최상의 품질로 제공합니다." data-image="images/products/s-eungal.png" data-link="https://www.coupang.com/vp/products/9041772795?itemId=27239881385&vendorItemId=93503648147&q=%ED%83%9C%EC%A1%B0%EC%8B%9D%ED%92%88&searchId=d1c4dc6c3882029&sourceType=search&itemsCount=36&searchRank=6&rank=6&traceId=miu2d3pp" data-badge="new">
+                <div class="product-card__particles">
+                    <span class="particle"></span>
+                    <span class="particle"></span>
+                    <span class="particle"></span>
+                </div>
+                <div class="product-card__shine"></div>
+                <div class="product-card__badge product-card__badge--new">✨ 신상품</div>
+                <div class="product-card__image-wrapper">
+                    <img src="images/products/s-eungal.png" alt="은갈치" class="product-card__image">
+                    <div class="product-card__overlay"></div>
+                </div>
+                <div class="product-card__content">
+                    <h2 class="product-card__name">은갈치</h2>
+                    <p class="product-card__description">은은한 빛깔과 부드러운 식감이 특징인 은갈치입니다. 신선한 원료만을 엄선하여 최상의 품질로 제공합니다.</p>
+                </div>
+            </article>
+
+            <article class="product-card" data-name="옥돔" data-description="고급 수산물로 유명한 옥돔입니다. 깊은 바다에서 잡은 신선한 옥돔을 특별한 방법으로 가공하여 제공합니다." data-image="images/products/s-okdom.png" data-badge="recommend">
+                <div class="product-card__particles">
+                    <span class="particle"></span>
+                    <span class="particle"></span>
+                    <span class="particle"></span>
+                </div>
+                <div class="product-card__shine"></div>
+                <div class="product-card__badge product-card__badge--recommend">⭐ 추천</div>
+                <div class="product-card__image-wrapper">
+                    <img src="images/products/s-okdom.png" alt="옥돔" class="product-card__image">
+                    <div class="product-card__overlay"></div>
+                </div>
+                <div class="product-card__content">
+                    <h2 class="product-card__name">옥돔</h2>
+                    <p class="product-card__description">고급 수산물로 유명한 옥돔입니다. 깊은 바다에서 잡은 신선한 옥돔을 특별한 방법으로 가공하여 제공합니다.</p>
+                </div>
+            </article>
+
+            <article class="product-card" data-name="보말" data-description="제주 바다의 특별한 맛, 보말입니다. 깨끗한 바다에서 자란 보말을 신선하게 포장하여 고객님께 전달합니다." data-image="images/products/s-bomal.png" data-link="https://www.coupang.com/vp/products/9086653283?itemId=26749806754&vendorItemId=93720869794&q=%ED%83%9C%EC%A1%B0%EC%8B%9D%ED%92%88&searchId=d1c4dc6c3882029&sourceType=search&itemsCount=36&searchRank=10&rank=10&traceId=miu2gpkq" data-badge="recommend">
+                <div class="product-card__particles">
+                    <span class="particle"></span>
+                    <span class="particle"></span>
+                    <span class="particle"></span>
+                </div>
+                <div class="product-card__shine"></div>
+                <div class="product-card__badge product-card__badge--recommend">⭐ 추천</div>
+                <div class="product-card__image-wrapper">
+                    <img src="images/products/s-bomal.png" alt="보말" class="product-card__image">
+                    <div class="product-card__overlay"></div>
+                </div>
+                <div class="product-card__content">
+                    <h2 class="product-card__name">보말</h2>
+                    <p class="product-card__description">제주 바다의 특별한 맛, 보말입니다. 깨끗한 바다에서 자란 보말을 신선하게 포장하여 고객님께 전달합니다.</p>
+                </div>
+            </article>
+
+            <article class="product-card" data-name="방어" data-description="고급 회로 즐기는 방어입니다. 신선도와 품질을 최우선으로 하여 엄선된 방어만을 제공합니다." data-image="images/products/s-bango.png" data-link="https://www.coupang.com/vp/products/9204735841?itemId=26749811885&vendorItemId=93720875279&q=%ED%83%9C%EC%A1%B0%EC%8B%9D%ED%92%88&searchId=d1c4dc6c3882029&sourceType=search&itemsCount=36&searchRank=15&rank=15&traceId=miu2h4dx" data-badge="best">
+                <div class="product-card__particles">
+                    <span class="particle"></span>
+                    <span class="particle"></span>
+                    <span class="particle"></span>
+                </div>
+                <div class="product-card__shine"></div>
+                <div class="product-card__badge product-card__badge--best">🏆 베스트</div>
+                <div class="product-card__image-wrapper">
+                    <img src="images/products/s-bango.png" alt="방어" class="product-card__image">
+                    <div class="product-card__overlay"></div>
+                </div>
+                <div class="product-card__content">
+                    <h2 class="product-card__name">방어</h2>
+                    <p class="product-card__description">고급 회로 즐기는 방어입니다. 신선도와 품질을 최우선으로 하여 엄선된 방어만을 제공합니다.</p>
+                </div>
+            </article>
+
+            <article class="product-card" data-name="갈치" data-description="전통 방식으로 가공한 갈치입니다. 오랜 경험과 노하우로 완성된 깊은 맛을 경험해보세요." data-image="images/products/s-kalsum.png" data-badge="recommend">
+                <div class="product-card__particles">
+                    <span class="particle"></span>
+                    <span class="particle"></span>
+                    <span class="particle"></span>
+                </div>
+                <div class="product-card__shine"></div>
+                <div class="product-card__badge product-card__badge--recommend">⭐ 추천</div>
+                <div class="product-card__image-wrapper">
+                    <img src="images/products/s-kalsum.png" alt="갈치" class="product-card__image">
+                    <div class="product-card__overlay"></div>
+                </div>
+                <div class="product-card__content">
+                    <h2 class="product-card__name">갈치</h2>
+                    <p class="product-card__description">전통 방식으로 가공한 갈치입니다. 오랜 경험과 노하우로 완성된 깊은 맛을 경험해보세요.</p>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <!-- Product Modal -->
+    <div class="product-modal" id="product-modal">
+        <div class="product-modal__overlay" id="modal-overlay"></div>
+        <div class="product-modal__content">
+            <button class="product-modal__close" id="modal-close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="product-modal__body">
+                <div class="product-modal__image-wrapper">
+                    <img id="modal-image" src="" alt="" class="product-modal__image">
+                </div>
+                <div class="product-modal__info">
+                    <span id="modal-badge" class="product-modal__badge"></span>
+                    <h2 id="modal-name" class="product-modal__name"></h2>
+                    <p id="modal-description" class="product-modal__description"></p>
+                    <ul class="product-modal__features">
+                        <li class="product-modal__feature">신선한 원료 엄선</li>
+                        <li class="product-modal__feature">전통 제조 방식</li>
+                        <li class="product-modal__feature">최고 품질 보장</li>
+                        <li class="product-modal__feature">신선한 포장 배송</li>
+                    </ul>
+                    <a id="modal-button" href="#" target="_blank" rel="noopener noreferrer" class="product-modal__button">
+                        구매하러 가기
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <div class="footer__content">
+                <div class="footer__logo">
+                    <a href="index.html">
+                        <img src="images/taejo-logo.png" alt="태조식품 로고" class="footer__logo-img">
+                    </a>
+                </div>
+                <nav class="footer__nav">
+                    <ul class="footer__menu">
+                        <li><a href="company.html">COMPANY</a></li>
+                        <li><a href="product.html">PRODUCT</a></li>
+                        <li><a href="contact.html">CONTACT</a></li>
+                    </ul>
+                </nav>
+                <div class="footer__info">
+                    <p class="footer__text">사업자번호: 346-45-00474 | 상호: 태조식품</p>
+                    <p class="footer__text">제주특별자치도 서귀포시 대정읍 하모항구로56-1, 1~2층</p>
+                    <p class="footer__text">전화: 010-8500-7800 | 이메일: kdm7700@naver.com</p>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copyright">© 2025 태조식품. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="floating-buttons">
+        <a href="tel:000-0000-0000" class="floating-btn floating-btn--phone" aria-label="전화하기">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+        </a>
+        <button class="floating-btn floating-btn--top" id="top-btn" aria-label="맨 위로">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+            </svg>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Product cards scroll animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const productCards = document.querySelectorAll('.product-card');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            productCards.forEach(function(card) {
+                observer.observe(card);
+            });
+
+            // Modal functionality
+            const modal = document.getElementById('product-modal');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalClose = document.getElementById('modal-close');
+            const modalImage = document.getElementById('modal-image');
+            const modalName = document.getElementById('modal-name');
+            const modalDescription = document.getElementById('modal-description');
+            const modalBadge = document.getElementById('modal-badge');
+            const modalButton = document.getElementById('modal-button');
+
+            function openModal(card) {
+                const name = card.getAttribute('data-name');
+                const description = card.getAttribute('data-description');
+                const image = card.getAttribute('data-image');
+                const link = card.getAttribute('data-link');
+                const badgeType = card.getAttribute('data-badge');
+
+                modalImage.src = image;
+                modalImage.alt = name;
+                modalName.textContent = name;
+                modalDescription.textContent = description;
+
+                // Set badge
+                modalBadge.className = 'product-modal__badge product-modal__badge--' + badgeType;
+                if (badgeType === 'hot') {
+                    modalBadge.textContent = '🔥 인기';
+                } else if (badgeType === 'new') {
+                    modalBadge.textContent = '✨ 신상품';
+                } else if (badgeType === 'best') {
+                    modalBadge.textContent = '🏆 베스트';
+                } else {
+                    modalBadge.textContent = '⭐ 추천';
+                }
+
+                // Set button
+                if (link) {
+                    modalButton.href = link;
+                    modalButton.style.display = 'inline-flex';
+                } else {
+                    modalButton.style.display = 'none';
+                }
+
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Card click handler
+            productCards.forEach(function(card) {
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openModal(card);
+                });
+            });
+
+            // Close modal handlers
+            modalOverlay.addEventListener('click', closeModal);
+            modalClose.addEventListener('click', closeModal);
+
+            // ESC key to close
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
