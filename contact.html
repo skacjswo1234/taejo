@@ -138,6 +138,7 @@
                     <div class="form-group form-group--submit">
                         <button type="submit" class="form-submit-btn">문의하기</button>
                     </div>
+                    <p class="form-status" id="contact-status"></p>
                 </form>
             </div>
         </section>
@@ -205,22 +206,60 @@
     <script src="script.js"></script>
     <script>
         // 문의 폼 제출 처리
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // 폼 데이터 수집
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
-            
-            // 여기에 실제 서버 전송 로직을 추가할 수 있습니다
-            // 예: fetch API를 사용한 서버 전송
-            
-            // 임시로 알림 표시
-            alert('문의가 접수되었습니다. 빠른 시일 내에 답변드리겠습니다.');
-            
-            // 폼 초기화
-            this.reset();
-        });
+        (function () {
+            const form = document.getElementById('contact-form');
+            const statusEl = document.getElementById('contact-status');
+
+            const setStatus = (msg, isError = false) => {
+                statusEl.textContent = msg;
+                statusEl.style.color = isError ? '#d14343' : '#0f7a2a';
+            };
+
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+                if (!formData.get('privacy')) {
+                    setStatus('개인정보 수집 동의가 필요합니다.', true);
+                    return;
+                }
+
+                const payload = {
+                    name: formData.get('name')?.toString().trim() || '',
+                    phone: formData.get('phone')?.toString().trim() || '',
+                    inquiryType: formData.get('inquiry-type')?.toString().trim() || '',
+                    subject: formData.get('subject')?.toString().trim() || '',
+                    message: formData.get('message')?.toString().trim() || '',
+                    privacy: !!formData.get('privacy'),
+                };
+
+                if (!payload.name || !payload.inquiryType || !payload.subject || !payload.message) {
+                    setStatus('필수 항목을 모두 입력해주세요.', true);
+                    return;
+                }
+
+                setStatus('전송 중입니다...');
+
+                try {
+                    const res = await fetch('/api/contact', {
+                        method: 'POST',
+                        headers: { 'content-type': 'application/json' },
+                        body: JSON.stringify(payload),
+                    });
+
+                    const data = await res.json().catch(() => ({}));
+
+                    if (res.ok && data.ok) {
+                        setStatus('문의가 접수되었습니다. 빠른 시일 내에 답변드리겠습니다.');
+                        form.reset();
+                    } else {
+                        setStatus(data.error || '전송 중 오류가 발생했습니다.', true);
+                    }
+                } catch (err) {
+                    setStatus('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', true);
+                }
+            });
+        })();
     </script>
 </body>
 </html>
