@@ -38,7 +38,26 @@
 
       <section id="inquiries" class="admin-section">
         <h2>문의 관리</h2>
-        <p>여기에 문의 리스트/처리 기능을 연결할 수 있습니다.</p>
+        <div id="inquiries-status" class="admin-form__status"></div>
+        <div class="admin-table-wrapper">
+          <table class="admin-table" id="inquiries-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>이름</th>
+                <th>전화</th>
+                <th>유형</th>
+                <th>제목</th>
+                <th>내용</th>
+                <th>동의</th>
+                <th>작성시각</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="8" style="text-align:center;">불러오는 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section id="password" class="admin-section">
@@ -73,6 +92,8 @@
       const logoutBtn = document.getElementById('logout-btn');
       const form = document.getElementById('password-form');
       const statusEl = document.getElementById('password-status');
+      const inquiriesStatus = document.getElementById('inquiries-status');
+      const inquiriesTable = document.getElementById('inquiries-table').querySelector('tbody');
 
       const closeMenu = () => {
         nav.classList.remove('open');
@@ -90,6 +111,47 @@
         sessionStorage.removeItem('adminAuthed');
         window.location.href = 'admin-login.html';
       });
+
+      async function loadInquiries() {
+        inquiriesStatus.textContent = '문의 목록을 불러오는 중...';
+        inquiriesStatus.className = 'admin-form__status';
+        inquiriesTable.innerHTML = '<tr><td colspan="8" style="text-align:center;">불러오는 중...</td></tr>';
+        try {
+          const res = await fetch('/api/admin-inquiries');
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data.ok) {
+            inquiriesStatus.textContent = data.error || '불러오기에 실패했습니다.';
+            inquiriesStatus.classList.add('error');
+            return;
+          }
+          const items = data.items || [];
+          if (!items.length) {
+            inquiriesTable.innerHTML = '<tr><td colspan="8" style="text-align:center;">데이터가 없습니다.</td></tr>';
+            inquiriesStatus.textContent = '';
+            return;
+          }
+          const rows = items.map(item => {
+            const privacy = item.privacy ? '동의' : '미동의';
+            return `
+              <tr>
+                <td>${item.id}</td>
+                <td>${item.name || ''}</td>
+                <td>${item.phone || ''}</td>
+                <td>${item.inquiry_type || ''}</td>
+                <td>${item.subject || ''}</td>
+                <td class="admin-table__message">${(item.message || '').replace(/</g,'&lt;')}</td>
+                <td>${privacy}</td>
+                <td>${item.created_at || ''}</td>
+              </tr>
+            `;
+          }).join('');
+          inquiriesTable.innerHTML = rows;
+          inquiriesStatus.textContent = '';
+        } catch (err) {
+          inquiriesStatus.textContent = '네트워크 오류가 발생했습니다.';
+          inquiriesStatus.classList.add('error');
+        }
+      }
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -117,6 +179,8 @@
           statusEl.classList.add('error');
         }
       });
+
+      loadInquiries();
     })();
   </script>
 </body>
