@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 로그인</title>
+  <link rel="stylesheet" href="styles-admin.css">
+</head>
+<body class="admin-login-page">
+  <div class="admin-auth-card">
+    <div class="admin-auth-logo">
+      <img src="images/taejo-logo.png" alt="태조 로고">
+    </div>
+    <h1 class="admin-auth-title">관리자 로그인</h1>
+    <form id="admin-login-form" class="admin-auth-form">
+      <label class="admin-auth-label" for="password">비밀번호</label>
+      <input type="password" id="password" name="password" class="admin-auth-input" placeholder="비밀번호를 입력하세요" required>
+      <button type="submit" class="admin-auth-button">로그인</button>
+      <p id="login-status" class="admin-auth-status"></p>
+    </form>
+  </div>
+
+  <script>
+    (function() {
+      const form = document.getElementById('admin-login-form');
+      const statusEl = document.getElementById('login-status');
+
+      // 이미 인증된 경우 바로 이동
+      if (sessionStorage.getItem('adminAuthed') === 'true') {
+        window.location.href = 'admin.html';
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const password = form.password.value.trim();
+        statusEl.textContent = '확인 중...';
+        statusEl.className = 'admin-auth-status';
+
+        try {
+          const res = await fetch('/api/admin-login', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ password })
+          });
+          const data = await res.json().catch(() => ({}));
+          if (res.ok && data.ok) {
+            sessionStorage.setItem('adminAuthed', 'true');
+            statusEl.textContent = '로그인 성공. 이동합니다...';
+            setTimeout(() => window.location.href = 'admin.html', 400);
+          } else {
+            statusEl.textContent = data.error || '비밀번호가 일치하지 않습니다.';
+            statusEl.classList.add('error');
+          }
+        } catch (err) {
+          statusEl.textContent = '네트워크 오류가 발생했습니다.';
+          statusEl.classList.add('error');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
+
