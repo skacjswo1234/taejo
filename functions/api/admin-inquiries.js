@@ -30,13 +30,37 @@ export const onRequest = async ({ request, env }) => {
   }
 
   try {
+    // status 컬럼이 있는지 확인하고 없으면 추가 시도
+    try {
+      await db.prepare(`ALTER TABLE contact_messages ADD COLUMN status TEXT DEFAULT 'new'`).run();
+    } catch (alterErr) {
+      // 이미 컬럼이 있거나 다른 에러면 무시
+      console.log("Status column check:", alterErr.message);
+    }
+
     const url = new URL(request.url);
     const search = url.searchParams.get("search") || "";
     const status = url.searchParams.get("status") || "";
 
-    let query = `SELECT id, name, phone, inquiry_type, subject, message, privacy, 
-         COALESCE(status, 'new') as status, created_at
-         FROM contact_messages WHERE 1=1`;
+    // status 컬럼이 있는지 확인하기 위해 먼저 간단한 쿼리 시도
+    let hasStatusColumn = true;
+    try {
+      await db.prepare(`SELECT status FROM contact_messages LIMIT 1`).first();
+    } catch (checkErr) {
+      hasStatusColumn = false;
+    }
+
+    let query;
+    if (hasStatusColumn) {
+      query = `SELECT id, name, phone, inquiry_type, subject, message, privacy, 
+           COALESCE(status, 'new') as status, created_at
+           FROM contact_messages WHERE 1=1`;
+    } else {
+      query = `SELECT id, name, phone, inquiry_type, subject, message, privacy, 
+           'new' as status, created_at
+           FROM contact_messages WHERE 1=1`;
+    }
+    
     const params = [];
 
     if (search) {
@@ -45,8 +69,8 @@ export const onRequest = async ({ request, env }) => {
       params.push(searchParam, searchParam, searchParam, searchParam);
     }
 
-    if (status) {
-      query += ` AND status = ?`;
+    if (status && hasStatusColumn) {
+      query += ` AND COALESCE(status, 'new') = ?`;
       params.push(status);
     }
 
@@ -54,8 +78,15 @@ export const onRequest = async ({ request, env }) => {
 
     const stmt = params.length > 0 ? db.prepare(query).bind(...params) : db.prepare(query);
     const rows = await stmt.all();
+    
+    // status 컬럼이 없으면 모든 항목에 'new' 추가
+    const items = (rows?.results || []).map(item => ({
+      ...item,
+      status: item.status || 'new'
+    }));
+    
     return new Response(
-      JSON.stringify({ ok: true, items: rows?.results || [] }),
+      JSON.stringify({ ok: true, items }),
       { status: 200, headers: corsHeaders }
     );
   } catch (err) {
