@@ -1,0 +1,8 @@
+name = "taejo"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "taejo-db"
+database_name = "taejo-db"
+database_id = "0b16198b-ff89-4f2e-a93a-0804f0da7e6e"
+
