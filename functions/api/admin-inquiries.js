@@ -30,12 +30,29 @@ export const onRequest = async ({ request, env }) => {
   }
 
   try {
-    const stmt = db.prepare(
-      `SELECT id, name, phone, inquiry_type, subject, message, privacy, created_at
-         FROM contact_messages
-         ORDER BY created_at DESC
-         LIMIT 200`
-    );
+    const url = new URL(request.url);
+    const search = url.searchParams.get("search") || "";
+    const status = url.searchParams.get("status") || "";
+
+    let query = `SELECT id, name, phone, inquiry_type, subject, message, privacy, 
+         COALESCE(status, 'new') as status, created_at
+         FROM contact_messages WHERE 1=1`;
+    const params = [];
+
+    if (search) {
+      query += ` AND (name LIKE ? OR phone LIKE ? OR subject LIKE ? OR message LIKE ?)`;
+      const searchParam = `%${search}%`;
+      params.push(searchParam, searchParam, searchParam, searchParam);
+    }
+
+    if (status) {
+      query += ` AND status = ?`;
+      params.push(status);
+    }
+
+    query += ` ORDER BY created_at DESC LIMIT 200`;
+
+    const stmt = params.length > 0 ? db.prepare(query).bind(...params) : db.prepare(query);
     const rows = await stmt.all();
     return new Response(
       JSON.stringify({ ok: true, items: rows?.results || [] }),
