@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /company.html
+Allow: /product.html
+Allow: /intro.html
+Allow: /contact.html
+Disallow: /admin.html
+Disallow: /admin-login.html
+Disallow: /functions/
+
+Sitemap: https://xn--961bp7b2bx3f.com/sitemap.xml
+
