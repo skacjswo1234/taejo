@@ -3,19 +3,39 @@
  * D1 바인딩 이름: taejo-db
  */
 export const onRequestPost = async ({ request, env }) => {
+  // CORS 헤더 설정
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "content-type": "application/json",
+  };
+
+  // OPTIONS 요청 처리 (CORS preflight)
+  if (request.method === "OPTIONS") {
+    return new Response(null, { status: 204, headers: corsHeaders });
+  }
+
   if (request.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), {
       status: 405,
-      headers: { "content-type": "application/json" },
+      headers: corsHeaders,
     });
   }
 
   const db = env["taejo-db"];
   if (!db) {
-    return new Response(JSON.stringify({ error: "DB binding missing" }), {
-      status: 500,
-      headers: { "content-type": "application/json" },
-    });
+    console.error("D1 바인딩 'taejo-db'를 찾을 수 없습니다. 사용 가능한 바인딩:", Object.keys(env));
+    return new Response(
+      JSON.stringify({ 
+        error: "DB binding missing", 
+        availableBindings: Object.keys(env).filter(k => k.includes("db") || k.includes("DB"))
+      }), 
+      {
+        status: 500,
+        headers: corsHeaders,
+      }
+    );
   }
 
   const contentType = request.headers.get("content-type") || "";
@@ -30,13 +50,14 @@ export const onRequestPost = async ({ request, env }) => {
     } else {
       return new Response(JSON.stringify({ error: "Unsupported content-type" }), {
         status: 415,
-        headers: { "content-type": "application/json" },
+        headers: corsHeaders,
       });
     }
   } catch (err) {
+    console.error("요청 본문 파싱 오류:", err);
     return new Response(JSON.stringify({ error: "Invalid body", detail: `${err}` }), {
       status: 400,
-      headers: { "content-type": "application/json" },
+      headers: corsHeaders,
     });
   }
 
@@ -50,19 +71,20 @@ export const onRequestPost = async ({ request, env }) => {
   if (!privacy) {
     return new Response(JSON.stringify({ error: "개인정보 수집 동의가 필요합니다." }), {
       status: 400,
-      headers: { "content-type": "application/json" },
+      headers: corsHeaders,
     });
   }
 
   if (!name || !inquiryType || !subject || !message) {
     return new Response(JSON.stringify({ error: "필수 항목을 모두 입력해주세요." }), {
       status: 400,
-      headers: { "content-type": "application/json" },
+      headers: corsHeaders,
     });
   }
 
   try {
-    await db
+    // 테이블 생성
+    const createTableResult = await db
       .prepare(
         `CREATE TABLE IF NOT EXISTS contact_messages (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -76,24 +98,42 @@ export const onRequestPost = async ({ request, env }) => {
         )`
       )
       .run();
+    
+    console.log("테이블 생성 결과:", createTableResult);
 
-    await db
+    // 데이터 삽입
+    const insertResult = await db
       .prepare(
         `INSERT INTO contact_messages (name, phone, inquiry_type, subject, message, privacy)
          VALUES (?, ?, ?, ?, ?, ?)`
       )
-      .bind(name, phone, inquiryType, subject, message, privacy ? 1 : 0)
+      .bind(name, phone || null, inquiryType, subject, message, privacy ? 1 : 0)
       .run();
 
-    return new Response(JSON.stringify({ ok: true }), {
+    console.log("데이터 삽입 결과:", insertResult);
+
+    return new Response(JSON.stringify({ ok: true, message: "문의가 접수되었습니다." }), {
       status: 200,
-      headers: { "content-type": "application/json" },
+      headers: corsHeaders,
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: "DB 오류", detail: `${err}` }), {
-      status: 500,
-      headers: { "content-type": "application/json" },
+    console.error("DB 오류 상세:", {
+      message: err.message,
+      stack: err.stack,
+      name: err.name,
+      cause: err.cause
     });
+    return new Response(
+      JSON.stringify({ 
+        error: "DB 오류", 
+        detail: err.message || `${err}`,
+        type: err.name || "UnknownError"
+      }), 
+      {
+        status: 500,
+        headers: corsHeaders,
+      }
+    );
   }
 };
 

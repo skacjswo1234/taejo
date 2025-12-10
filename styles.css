@@ -766,18 +766,18 @@ a {
         letter-spacing: 0.01em;
     }
 
-    /* 모바일: 이미지 축소(최대 500x800), 간격 축소 */
+    /* 모바일: 이미지 추가 축소(최대 420x672), 간격 더 좁게 */
     .product-section__list-item {
-        width: min(500px, 80vw);
-        min-width: min(500px, 80vw);
-        max-width: min(500px, 80vw);
+        width: min(420px, 70vw);
+        min-width: min(420px, 70vw);
+        max-width: min(420px, 70vw);
         height: auto;
         aspect-ratio: 5 / 8;
     }
 
     .product-section__list-inner {
-        gap: 3px;
-        padding: 0 8px;
+        gap: 2px;
+        padding: 0 6px;
     }
 
     /* 모바일: 스크롤 속도 2배 빠르게 */
