@@ -157,6 +157,36 @@
             transform: translateX(5px);
         }
 
+        .product-card__buy-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #6B4423 0%, #8B5A3C 100%);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: var(--font-secondary);
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(107, 68, 35, 0.3);
+            margin-top: 16px;
+        }
+
+        .product-card__buy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 68, 35, 0.4);
+            background: linear-gradient(135deg, #8B5A3C 0%, #6B4423 100%);
+        }
+
+        .product-card__buy-btn:active {
+            transform: translateY(0);
+        }
+
         /* 트랜디한 뱃지 스타일 */
         .product-card__badge {
             position: absolute;
@@ -525,6 +555,11 @@
                 font-size: 14px;
             }
 
+            .product-card__buy-btn {
+                font-size: 14px;
+                padding: 12px 24px;
+            }
+
             .product-modal {
                 padding: 10px;
                 align-items: flex-start;
@@ -701,7 +736,7 @@
 
     <main class="product-main">
         <section class="product-grid">
-            <article class="product-card" data-name="제주 옥돔" data-description="제주 청정해역에서 잡은 옥돔을 신선하게 가공해 담았습니다." data-image="images/products/s-okdom.png" data-badge="recommend">
+            <article class="product-card" data-name="제주 옥돔" data-description="제주 청정해역에서 잡은 옥돔을 신선하게 가공해 담았습니다." data-image="images/products/s-okdom.png" data-link="https://smartstore.naver.com/choljinho/products/12764852981" data-badge="recommend">
                 <div class="product-card__particles">
                     <span class="particle"></span>
                     <span class="particle"></span>
@@ -716,10 +751,11 @@
                 <div class="product-card__content">
                     <h2 class="product-card__name">제주 옥돔</h2>
                     <p class="product-card__description">제주 청정해역에서 잡은 옥돔을 신선하게 가공해 담았습니다.</p>
+                    <a href="https://smartstore.naver.com/choljinho/products/12764852981" target="_blank" rel="noopener noreferrer" class="product-card__buy-btn">구매하러 가기</a>
                 </div>
             </article>
 
-            <article class="product-card" data-name="보말" data-description="제주 바다의 특별한 맛, 보말입니다. 깨끗한 바다에서 자란 보말을 신선하게 포장하여 고객님께 전달합니다." data-image="images/products/s-bomal.png" data-link="https://www.coupang.com/vp/products/9086653283?itemId=26749806754&vendorItemId=93720869794&q=%ED%83%9C%EC%A1%B0%EC%8B%9D%ED%92%88&searchId=d1c4dc6c3882029&sourceType=search&itemsCount=36&searchRank=10&rank=10&traceId=miu2gpkq" data-badge="recommend">
+            <article class="product-card" data-name="보말" data-description="제주 바다의 특별한 맛, 보말입니다. 깨끗한 바다에서 자란 보말을 신선하게 포장하여 고객님께 전달합니다." data-image="images/products/s-bomal.png" data-link="https://smartstore.naver.com/choljinho/products/12769866195" data-badge="recommend">
                 <div class="product-card__particles">
                     <span class="particle"></span>
                     <span class="particle"></span>
@@ -734,10 +770,11 @@
                 <div class="product-card__content">
                     <h2 class="product-card__name">보말</h2>
                     <p class="product-card__description">제주 바다의 특별한 맛, 보말입니다. 깨끗한 바다에서 자란 보말을 신선하게 포장하여 고객님께 전달합니다.</p>
+                    <a href="https://smartstore.naver.com/choljinho/products/12769866195" target="_blank" rel="noopener noreferrer" class="product-card__buy-btn">구매하러 가기</a>
                 </div>
             </article>
 
-            <article class="product-card" data-name="대방어사잇살" data-description="대방어 중에서도 사잇살만 골라 담아 쫄깃하고 깊은 풍미를 전합니다." data-image="images/products/s-bango.png" data-link="https://www.coupang.com/vp/products/9204735841?itemId=26749811885&vendorItemId=93720875279&q=%ED%83%9C%EC%A1%B0%EC%8B%9D%ED%92%88&searchId=d1c4dc6c3882029&sourceType=search&itemsCount=36&searchRank=15&rank=15&traceId=miu2h4dx" data-badge="best">
+            <article class="product-card" data-name="대방어사잇살" data-description="대방어 중에서도 사잇살만 골라 담아 쫄깃하고 깊은 풍미를 전합니다." data-image="images/products/s-bango.png" data-link="https://smartstore.naver.com/choljinho/products/12770125460" data-badge="best">
                 <div class="product-card__particles">
                     <span class="particle"></span>
                     <span class="particle"></span>
@@ -752,10 +789,11 @@
                 <div class="product-card__content">
                     <h2 class="product-card__name">대방어사잇살</h2>
                     <p class="product-card__description">대방어 중에서도 사잇살만 골라 담아 쫄깃하고 깊은 풍미를 전합니다.</p>
+                    <a href="https://smartstore.naver.com/choljinho/products/12770125460" target="_blank" rel="noopener noreferrer" class="product-card__buy-btn">구매하러 가기</a>
                 </div>
             </article>
 
-            <article class="product-card" data-name="제주 자리돔" data-description="제주 자리돔을 신선하게 손질해 담백한 풍미를 살렸습니다." data-image="images/products/s-kalsum.png" data-badge="recommend">
+            <article class="product-card" data-name="제주 자리돔" data-description="제주 자리돔을 신선하게 손질해 담백한 풍미를 살렸습니다." data-image="images/products/s-kalsum.png" data-link="https://smartstore.naver.com/choljinho/products/12771172635" data-badge="recommend">
                 <div class="product-card__particles">
                     <span class="particle"></span>
                     <span class="particle"></span>
@@ -770,10 +808,11 @@
                 <div class="product-card__content">
                     <h2 class="product-card__name">제주 자리돔</h2>
                     <p class="product-card__description">제주 자리돔을 신선하게 손질해 담백한 풍미를 살렸습니다.</p>
+                    <a href="https://smartstore.naver.com/choljinho/products/12771172635" target="_blank" rel="noopener noreferrer" class="product-card__buy-btn">구매하러 가기</a>
                 </div>
             </article>
 
-            <article class="product-card" data-name="영암어란" data-description="영암에서 정성껏 숙성한 어란으로 진한 감칠맛을 더했습니다." data-image="images/products/s-eran.png" data-badge="new">
+            <article class="product-card" data-name="영암어란" data-description="영암에서 정성껏 숙성한 어란으로 진한 감칠맛을 더했습니다." data-image="images/products/s-eran.png" data-link="https://smartstore.naver.com/choljinho/products/12774783942" data-badge="new">
                 <div class="product-card__particles">
                     <span class="particle"></span>
                     <span class="particle"></span>
@@ -788,6 +827,7 @@
                 <div class="product-card__content">
                     <h2 class="product-card__name">영암어란</h2>
                     <p class="product-card__description">영암에서 정성껏 숙성한 어란으로 진한 감칠맛을 더했습니다.</p>
+                    <a href="https://smartstore.naver.com/choljinho/products/12774783942" target="_blank" rel="noopener noreferrer" class="product-card__buy-btn">구매하러 가기</a>
                 </div>
             </article>
         </section>
@@ -948,6 +988,10 @@
             // Card click handler
             productCards.forEach(function(card) {
                 card.addEventListener('click', function(e) {
+                    // 버튼 클릭 시에는 모달을 열지 않음
+                    if (e.target.closest('.product-card__buy-btn')) {
+                        return;
+                    }
                     e.preventDefault();
                     openModal(card);
                 });
