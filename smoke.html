@@ -51,7 +51,8 @@
         }
 
         .smoke-main {
-            padding-top: 0;
+            padding: 0;
+            margin: 0;
             background: #ffffff;
         }
 
@@ -59,6 +60,13 @@
             width: 100%;
             padding: 0;
             margin: 0;
+            display: block;
+            border: none;
+            outline: none;
+        }
+
+        .smoke-section + .smoke-section {
+            margin-top: 0;
         }
 
         .smoke-section__head {
@@ -91,6 +99,7 @@
             padding: 0;
             position: relative;
             line-height: 0;
+            display: block;
         }
 
         .smoke-item img {
@@ -100,6 +109,8 @@
             margin: 0;
             padding: 0;
             vertical-align: top;
+            border: none;
+            outline: none;
         }
 
         .smoke-image--mobile {
@@ -114,6 +125,7 @@
             .smoke-section {
                 padding: 0;
                 margin: 0;
+                display: block;
             }
 
             .smoke-section__head {
@@ -132,6 +144,14 @@
 
             .smoke-item {
                 padding: 0;
+                margin: 0;
+                display: block;
+            }
+
+            .smoke-item img {
+                margin: 0;
+                padding: 0;
+                display: block;
             }
 
             .smoke-image--desktop {
@@ -237,6 +257,13 @@
 
         <section class="smoke-section">
             <div class="smoke-item">
+                <img src="images/smoke/urim-1.jpg" alt="태조식품의 해답: 특허받은 회전 스크류 기술" class="smoke-image--desktop">
+                <img src="images/smoke/urim-1.jpg" alt="태조식품의 해답: 특허받은 회전 스크류 기술" class="smoke-image--mobile">
+            </div>
+        </section>
+
+        <section class="smoke-section">
+            <div class="smoke-item">
                 <img src="images/smoke/s-14.png" alt="훈연 과정 14" class="smoke-image--desktop">
                 <img src="images/smoke/s-14-m.png" alt="훈연 과정 14" class="smoke-image--mobile">
             </div>
@@ -249,19 +276,6 @@
             </div>
         </section>
 
-        <section class="smoke-section">
-            <div class="smoke-item">
-                <img src="images/smoke/smoke-1.png" alt="훈연과우림" class="smoke-image--desktop">
-                <img src="images/smoke/smoke-1-m.png" alt="훈연과우림" class="smoke-image--mobile">
-            </div>
-        </section>
-
-        <section class="smoke-section">
-            <div class="smoke-item">
-                <img src="images/smoke/urim-1.jpg" alt="태조식품의 해답: 특허받은 회전 스크류 기술" class="smoke-image--desktop">
-                <img src="images/smoke/urim-1.jpg" alt="태조식품의 해답: 특허받은 회전 스크류 기술" class="smoke-image--mobile">
-            </div>
-        </section>
     </main>
 
     <div id="scroll-down-target"></div>
