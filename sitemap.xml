@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://xn--961bp7b2bx3f.com/</loc>
+    <loc>https://xn--wv4bz5h14hr0d.com/</loc>
     <lastmod>2025-01-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://xn--961bp7b2bx3f.com/index.html</loc>
+    <loc>https://xn--wv4bz5h14hr0d.com/index.html</loc>
     <lastmod>2025-01-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://xn--961bp7b2bx3f.com/company.html</loc>
+    <loc>https://xn--wv4bz5h14hr0d.com/company.html</loc>
     <lastmod>2025-01-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://xn--961bp7b2bx3f.com/product.html</loc>
+    <loc>https://xn--wv4bz5h14hr0d.com/product.html</loc>
     <lastmod>2025-01-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://xn--961bp7b2bx3f.com/intro.html</loc>
+    <loc>https://xn--wv4bz5h14hr0d.com/intro.html</loc>
     <lastmod>2025-01-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://xn--961bp7b2bx3f.com/contact.html</loc>
+    <loc>https://xn--wv4bz5h14hr0d.com/contact.html</loc>
     <lastmod>2025-01-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://xn--wv4bz5h14hr0d.com/smoke.html</loc>
+    <lastmod>2025-01-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
-

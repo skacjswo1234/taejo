@@ -9,5 +9,5 @@ Disallow: /admin.html
 Disallow: /admin-login.html
 Disallow: /functions/
 
-Sitemap: https://xn--961bp7b2bx3f.com/sitemap.xml
+Sitemap: https://xn--wv4bz5h14hr0d.com/sitemap.xml
 
