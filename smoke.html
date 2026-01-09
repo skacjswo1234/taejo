@@ -102,7 +102,8 @@
             display: block;
         }
 
-        .smoke-item img {
+        .smoke-item img,
+        .smoke-item video {
             width: 100%;
             height: auto;
             display: block;
@@ -111,6 +112,21 @@
             vertical-align: top;
             border: none;
             outline: none;
+            object-fit: cover;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .smoke-item video {
+            filter: contrast(1.2) brightness(1.1) saturate(1.1);
+            will-change: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: high-quality;
         }
 
         .smoke-image--mobile {
@@ -148,10 +164,25 @@
                 display: block;
             }
 
-            .smoke-item img {
+            .smoke-item img,
+            .smoke-item video {
                 margin: 0;
                 padding: 0;
                 display: block;
+                object-fit: cover;
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+                transform: translateZ(0);
+                backface-visibility: hidden;
+                -webkit-backface-visibility: hidden;
+            }
+
+            .smoke-item video {
+                filter: contrast(1.15) brightness(1.08) saturate(1.05);
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
             }
 
             .smoke-image--desktop {
@@ -264,8 +295,8 @@
 
         <section class="smoke-section">
             <div class="smoke-item">
-                <img src="images/smoke/s-14.png" alt="훈연 과정 14" class="smoke-image--desktop">
-                <img src="images/smoke/s-14-m.png" alt="훈연 과정 14" class="smoke-image--mobile">
+                <img src="images/smoke/s-14.gif" alt="훈연 과정 14" class="smoke-image--desktop">
+                <video src="images/smoke/s-14-m.mp4" class="smoke-image--mobile" autoplay playsinline webkit-playsinline loop muted preload="auto" title="훈연 과정 14" style="max-width: 100%; height: auto;"></video>
             </div>
         </section>
 
