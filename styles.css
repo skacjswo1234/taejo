@@ -93,7 +93,7 @@ a {
 }
 
 .logo {
-    width: 60px;
+    width: 100px;
     height: auto;
     display: block;
 }
@@ -525,6 +525,10 @@ a {
 
 /* 모바일 */
 @media (max-width: 768px) {
+    .logo {
+        width: 80px;
+    }
+
     .hero-title {
         font-size: 42px;
         margin-bottom: 16px;
