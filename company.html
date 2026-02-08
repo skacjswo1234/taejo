@@ -16,6 +16,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT.css">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        @font-face {
+            font-family: 'Paperlogy';
+            src: url('font/Paperlogy-5Medium.ttf') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Paperlogy';
+            src: url('font/Paperlogy-7Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        .company-section__title--paperlogy {
+            font-family: 'Paperlogy', var(--font-secondary), sans-serif;
+        }
+        .company-section__title-icon {
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+            font-style: normal;
+        }
+        .company-section__head--feature {
+            padding-top: 24px;
+            padding-bottom: 8px;
+        }
+        .company-section__head--feature .company-section__title {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        @media (max-width: 768px) {
+            .company-section__head--feature {
+                margin-top: 32px;
+                margin-bottom: 24px;
+                padding-top: 40px;
+                padding-bottom: 16px;
+            }
+            .company-section__head--feature .company-section__title {
+                font-size: 28px;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="header" id="header">
@@ -122,6 +165,22 @@
         <section class="company-section fade-in-up">
             <img src="images/company/c-4.png" alt="Company Image 4" class="company-image-full company-image-full--desktop">
             <img src="images/company/c-4-m.png" alt="Company Image 4" class="company-image-full company-image-full--mobile">
+        </section>
+
+        <section class="company-section fade-in-up">
+            <div class="company-section__head company-section__head--feature">
+                <h2 class="company-section__title company-section__title--paperlogy"><span class="company-section__title-icon" aria-hidden="true">🏛️</span>홍보관</h2>
+            </div>
+            <img src="images/company/c-9.jpg" alt="홍보관" class="company-image-full company-image-full--desktop">
+            <img src="images/company/c-9-m.jpg" alt="홍보관" class="company-image-full company-image-full--mobile">
+        </section>
+
+        <section class="company-section fade-in-up">
+            <div class="company-section__head company-section__head--feature">
+                <h2 class="company-section__title company-section__title--paperlogy"><span class="company-section__title-icon" aria-hidden="true">🫙</span>분해숙성실</h2>
+            </div>
+            <img src="images/company/c-10.jpg" alt="분해숙성실" class="company-image-full company-image-full--desktop">
+            <img src="images/company/c-10-m.jpg" alt="분해숙성실" class="company-image-full company-image-full--mobile">
         </section>
 
         <section class="company-section fade-in-up">
